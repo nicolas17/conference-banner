@@ -3,11 +3,12 @@ import QtQuick 2.3
 Rectangle {
     FontLoader { id: fjalla; source: "FjallaOne-Regular.ttf" }
 
-    color: "#231f20"
-    Item {
-        scale: Math.min(parent.height, parent.width/(16/9))/720
+    scale: Math.min(height, width/(16/9))/720
+    color: "black"
+    Rectangle {
         width: 1280
         height: 720
+        color: "#231f20"
 
         //width: 1366
         //height: width/(16/9)

@@ -7,11 +7,11 @@ Rectangle {
     Item {
         width: 1280
         height: 720
+        clip: true
         scale: Math.min(parent.height, parent.width/(16/9))/720
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
         Item {
-            clip: true
             width: 1280
             height: 720
             Rectangle {
@@ -78,6 +78,41 @@ Rectangle {
                         anchors.right: parent.right
                     }
                 }
+            }
+            Rectangle {
+                id: slide2
+                width: 1280
+                height: 720
+                color: "#231f20"
+
+                //width: 1366
+                //height: width/(16/9)
+
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.top: parent.bottom
+
+                Text {
+                    text: "[Acá iría la lista de charlas]"
+                    font.family: fjalla.name
+                    font.pixelSize: 70
+                    color: "#0089cf";
+                    y: 320
+
+                    anchors.horizontalCenter: parent.horizontalCenter
+                }
+            }
+            SequentialAnimation on y {
+                loops: Animation.Infinite
+                NumberAnimation {
+                    from: 0; to: -720;
+                    easing.type: Easing.InOutCirc; duration: 500
+                }
+                PauseAnimation { duration: 4000 }
+                NumberAnimation {
+                    from: -720; to: 0;
+                    easing.type: Easing.InOutCirc; duration: 500
+                }
+                PauseAnimation { duration: 4000 }
             }
         }
     }

@@ -44,7 +44,7 @@ Rectangle {
                     id: topText
                     y: 200
                     anchors.left: logo.right
-                    anchors.leftMargin: 100
+                    anchors.leftMargin: 90
                     anchors.right: parent.right
 
                     Text {
@@ -70,7 +70,7 @@ Rectangle {
                     Text {
                         text: "Instituto Geográfico Nacional"
                         font.family: fjalla.name
-                        font.pixelSize: 50
+                        font.pixelSize: 48
                         color: "#0089cf";
                         y: 320
 

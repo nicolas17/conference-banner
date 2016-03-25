@@ -1,3 +1,11 @@
+/*
+ * Copyright (c) 2016 Nicolás Alvarez
+ *
+ * Licensed under the General Public License version 3,
+ * or (at your option) any later version. See the LICENSE
+ * file for details.
+ */
+
 import QtQuick 2.3
 
 Rectangle {

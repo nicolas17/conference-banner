@@ -17,9 +17,6 @@ Rectangle {
     //width: 1366
     //height: width/(16/9)
 
-    anchors.horizontalCenter: parent.horizontalCenter
-    anchors.verticalCenter: parent.verticalCenter
-
     Image {
         id: bkgnd
         source: "patagonia-bg.png"

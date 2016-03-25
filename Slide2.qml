@@ -17,9 +17,6 @@ Rectangle {
     //width: 1366
     //height: width/(16/9)
 
-    anchors.horizontalCenter: parent.horizontalCenter
-    anchors.top: parent.bottom
-
     Text {
         text: "[Acá iría la lista de charlas]"
         font.family: fjalla.name

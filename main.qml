@@ -8,10 +8,18 @@
 
 
 import QtQuick 2.3
+import QtQml.Models 2.1
 
 Rectangle {
     FontLoader { id: fjalla; source: "FjallaOne-Regular.ttf" }
     color: "black"
+
+    ObjectModel {
+        id: slideModel
+        Slide1 {}
+        Slide2 {}
+        Slide1 {} // always repeat the last one
+    }
 
     Item {
         width: 1280
@@ -20,24 +28,24 @@ Rectangle {
         scale: Math.min(parent.height, parent.width/(16/9))/720
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
-        Item {
+        ListView {
+            id: slideListView
             width: 1280
             height: 720
-            Slide1 {}
-            Slide2 {}
-            SequentialAnimation on y {
-                loops: Animation.Infinite
-                PauseAnimation { duration: 4000 }
-                NumberAnimation {
-                    from: 0; to: -720;
-                    easing.type: Easing.InOutCirc; duration: 500
-                }
-                PauseAnimation { duration: 4000 }
-                NumberAnimation {
-                    from: -720; to: 0;
-                    easing.type: Easing.InOutCirc; duration: 500
-                }
+            model: slideModel
+            highlightFollowsCurrentItem: true
+            highlightMoveDuration: 1000
+            highlightMoveVelocity: -1
+            highlightRangeMode: ListView.StrictlyEnforceRange
+            interactive: false // disable mouse flicking
+
+            Timer {
+                interval: 3000
+                repeat: true
+                running: true
+                onTriggered: ++slideListView.currentIndex;
             }
+            onAtYEndChanged: if (atYEnd) positionViewAtBeginning()
         }
     }
 }

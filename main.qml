@@ -13,6 +13,10 @@ import QtQml.Models 2.1
 Rectangle {
     FontLoader { id: fjalla; source: "FjallaOne-Regular.ttf" }
     color: "black"
+    width: 800
+    height: 450
+    id: root
+    signal loopEnded()
 
     ObjectModel {
         id: slideModel
@@ -45,7 +49,7 @@ Rectangle {
                 running: true
                 onTriggered: ++slideListView.currentIndex;
             }
-            onAtYEndChanged: if (atYEnd) positionViewAtBeginning()
+            onAtYEndChanged: if (atYEnd) { positionViewAtBeginning(); root.loopEnded(); }
         }
     }
 }

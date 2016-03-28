@@ -18,7 +18,12 @@ int main(int argc, char** argv) {
     parser.addHelpOption();
     parser.addOption(QCommandLineOption("single-loop", "Run a single loop iteration and quit."));
     parser.addOption(QCommandLineOption("pos", "Set the position of the window (top-left corner). Used for recording.", "x,y"));
+    parser.addOption(QCommandLineOption("fullscreen", "Run banner in full screen"));
     parser.process(app);
+
+    if (parser.isSet("pos") && parser.isSet("fullscreen")) {
+        qFatal("Can't set position and fullscreen at the same time");
+    }
 
     QQuickView view;
     view.setSource(QUrl::fromLocalFile("../main.qml"));
@@ -40,7 +45,11 @@ int main(int argc, char** argv) {
         view.setPosition(posx, posy);
     }
 
-    view.show();
+    if (parser.isSet("fullscreen")) {
+        view.showFullScreen();
+    } else {
+        view.show();
+    }
 
     return app.exec();
 }

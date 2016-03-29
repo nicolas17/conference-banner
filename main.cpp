@@ -6,6 +6,8 @@
  * file for details.
  */
 
+#include "paths.h"
+
 #include <QGuiApplication>
 #include <QCommandLineParser>
 #include <QQuickView>
@@ -25,8 +27,12 @@ int main(int argc, char** argv) {
         qFatal("Can't set position and fullscreen at the same time");
     }
 
+    const QString mainPath = dataPath("main.qml");
+    if (mainPath.isEmpty() || !QFile::exists(mainPath)) {
+        qFatal("Can't find data files");
+    }
     QQuickView view;
-    view.setSource(QUrl::fromLocalFile("../main.qml"));
+    view.setSource(QUrl::fromLocalFile(mainPath));
     view.setResizeMode(QQuickView::SizeRootObjectToView);
 
     if (parser.isSet("single-loop")) {

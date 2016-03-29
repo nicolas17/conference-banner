@@ -4,9 +4,23 @@ project(foss4g-banner)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
+add_definitions(-Wall)
+
+include(GNUInstallDirs)
 
 find_package(Qt5Quick)
 
-add_executable(foss4g-banner WIN32 main.cpp)
+add_executable(foss4g-banner WIN32 main.cpp paths.cpp)
+
+set_source_files_properties(paths.cpp
+    PROPERTIES COMPILE_DEFINITIONS "DATADIR=\"${CMAKE_INSTALL_FULL_DATADIR}\""
+)
 
 target_link_libraries(foss4g-banner Qt5::Quick)
+
+install(TARGETS foss4g-banner
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+)
+install(FILES main.qml Slide1.qml Slide2.qml patagonia-bg.png foss4g-ar-1.png
+    DESTINATION ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}
+)

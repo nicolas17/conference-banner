@@ -33,13 +33,13 @@ void ProgramFetcher::fetchAsync() {
     qDebug() << "Fetching JSON...";
     connect(reply, &QNetworkReply::finished, this, [this, reply]() {
         qDebug() << "Got JSON";
-        Program p = parseJson(reply->readAll());
+        ProgramData p = parseJson(reply->readAll());
         emit this->finished(p);
     });
 }
 
-Talk parseTalk(const QJsonObject& obj) {
-    Talk talk;
+TalkData parseTalk(const QJsonObject& obj) {
+    TalkData talk;
 #define PARSE_TALK_PROPERTY(P)             \
     if (obj.contains(#P)) {                \
         Q_ASSERT(obj.value(#P).isString());\
@@ -53,10 +53,10 @@ Talk parseTalk(const QJsonObject& obj) {
     return talk;
 }
 
-Interval parseInterval(const QJsonObject& agendaObj) {
+IntervalData parseInterval(const QJsonObject& agendaObj) {
     const QTimeZone TIMEZONE("America/Argentina/Buenos_Aires");
 
-    Interval interval;
+    IntervalData interval;
 
     Q_ASSERT(agendaObj.value("start").isString());
     QString startDateStr = agendaObj.value("start").toString();
@@ -82,17 +82,17 @@ Interval parseInterval(const QJsonObject& agendaObj) {
     return interval;
 }
 
-Program ProgramFetcher::parseJson(const QByteArray& data) {
+ProgramData ProgramFetcher::parseJson(const QByteArray& data) {
     QJsonDocument doc = QJsonDocument::fromJson(data);
     Q_ASSERT(doc.isArray());
 
-    Program p;
+    ProgramData p;
     QJsonArray arr = doc.array();
     Q_FOREACH (const QJsonValue& val, arr) {
         Q_ASSERT(val.isObject());
         QJsonObject dayObj = val.toObject();
 
-        Day day;
+        DayData day;
 
         Q_ASSERT(dayObj.value("title").isString());
         day.title = dayObj.value("title").toString();
@@ -120,18 +120,18 @@ Program ProgramFetcher::parseJson(const QByteArray& data) {
     }
     return p;
 }
-void debugOutput(const Program& program) {
+void debugOutput(const ProgramData& program) {
     qDebug() << "Beginning program";
-    Q_FOREACH (const Day& day, program.days) {
+    Q_FOREACH (const DayData& day, program.days) {
         qDebug() << "Day:" << day.title;
         qDebug() << " Rooms:";
         Q_FOREACH (const QString& room, day.rooms) {
             qDebug() << "  " << room;
         }
         qDebug() << " Intervals:";
-        Q_FOREACH (const Interval& interval, day.intervals) {
+        Q_FOREACH (const IntervalData& interval, day.intervals) {
             qDebug() << "  " << interval.start << "-" << interval.end;
-            Q_FOREACH (const Talk& talk, interval.talks) {
+            Q_FOREACH (const TalkData& talk, interval.talks) {
                 qDebug() << "    " << talk.title;
             }
         }

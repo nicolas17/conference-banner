@@ -23,11 +23,11 @@ class TalkModel: public QObject {
     Q_PROPERTY(QString title READ title)
     Q_PROPERTY(QString room READ room)
 
-    Talk m_talk;
+    TalkData m_talk;
     QString m_room;
 
 public:
-    TalkModel(const Talk& talk, const QString& room)
+    TalkModel(const TalkData& talk, const QString& room)
         : m_talk(talk)
         , m_room(room)
     {
@@ -43,7 +43,7 @@ public:
 // TODO this should probably go to another file.
 // Note that 'program' will be freed after this function returns,
 // so we can't retain references to any of it.
-void updateModel(QQmlContext* ctxt, const Program& program) {
+void updateModel(QQmlContext* ctxt, const ProgramData& program) {
     QList<QObject*> model;
     const int dayNum = 3;
     const int intervalNum = 2;
@@ -96,7 +96,7 @@ int main(int argc, char** argv) {
     QNetworkAccessManager qnam;
     ProgramFetcher fetcher(&qnam, QUrl::fromLocalFile("programme-test.json"));
     //ProgramFetcher fetcher(&qnam, QUrl("http://www.foss4g-ar.org/programme.json"));
-    QObject::connect(&fetcher, &ProgramFetcher::finished, [&view](const Program& p) {
+    QObject::connect(&fetcher, &ProgramFetcher::finished, [&view](const ProgramData& p) {
         updateModel(view.rootContext(), p);
     });
     fetcher.fetchAsync();

@@ -17,27 +17,29 @@
 class QNetworkAccessManager;
 class QNetworkReply;
 
-struct Talk {
+// this is the raw data as read from the JSON
+
+struct TalkData {
     QString title, speaker, from, works;
 };
 
-struct Interval {
+struct IntervalData {
     QDateTime start;
     QDateTime end;
-    QList<Talk> talks; //in the same order as Day::rooms
+    QList<TalkData> talks; //in the same order as Day::rooms
 };
 
-struct Day {
+struct DayData {
     QString title;
     QList<QString> rooms;
-    QList<Interval> intervals;
+    QList<IntervalData> intervals;
 };
 
-struct Program {
-    QList<Day> days;
+struct ProgramData {
+    QList<DayData> days;
 };
 
-void debugOutput(const Program& program);
+void debugOutput(const ProgramData& program);
 
 class ProgramFetcher: public QObject {
     Q_OBJECT
@@ -47,7 +49,7 @@ private:
     QUrl m_url;
     bool m_fetching;
 
-    static Program parseJson(const QByteArray& data);
+    static ProgramData parseJson(const QByteArray& data);
 
 public:
     ProgramFetcher(QNetworkAccessManager* qnam, const QUrl& url);
@@ -56,7 +58,7 @@ public:
 
 signals:
     void error(const QString& err);
-    void finished(const Program& program);
+    void finished(const ProgramData& program);
 };
 
 #endif

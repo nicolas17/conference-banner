@@ -12,6 +12,7 @@
 #include <QList>
 #include <QDateTime>
 #include <QUrl>
+#include <QObject>
 
 class QNetworkAccessManager;
 class QNetworkReply;

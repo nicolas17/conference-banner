@@ -8,6 +8,7 @@
 
 #include "talk-model.h"
 
+#include <QDebug>
 #include <QTimeZone>
 
 #include <QNetworkAccessManager>

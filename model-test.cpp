@@ -15,7 +15,7 @@ int main(int argc, char** argv) {
     QCoreApplication app(argc, argv);
 
     QNetworkAccessManager qnam;
-    ProgramFetcher fetcher(&qnam, QUrl::fromLocalFile("www.foss4g-ar.org/programme.json"));
+    ProgramFetcher fetcher(&qnam, QUrl::fromLocalFile("programme-test.json"));
     QObject::connect(&fetcher, &ProgramFetcher::finished, [&app](const Program& p) {
         debugOutput(p);
         app.quit();

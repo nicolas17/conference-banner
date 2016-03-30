@@ -7,11 +7,53 @@
  */
 
 #include "paths.h"
+#include "talk-model.h"
 
 #include <QGuiApplication>
 #include <QCommandLineParser>
+
+#include <QNetworkAccessManager>
+
+#include <QQmlContext>
 #include <QQuickView>
 #include <QQuickItem>
+
+class TalkModel: public QObject {
+    Q_OBJECT
+    Q_PROPERTY(QString title READ title)
+    Q_PROPERTY(QString room READ room)
+
+    Talk m_talk;
+    QString m_room;
+
+public:
+    TalkModel(const Talk& talk, const QString& room)
+        : m_talk(talk)
+        , m_room(room)
+    {
+    }
+    const QString& title() const {
+        return m_talk.title;
+    }
+    const QString& room() const {
+        return m_room;
+    }
+};
+
+// TODO this should probably go to another file.
+// Note that 'program' will be freed after this function returns,
+// so we can't retain references to any of it.
+void updateModel(QQmlContext* ctxt, const Program& program) {
+    QList<QObject*> model;
+    const int dayNum = 3;
+    const int intervalNum = 2;
+    Q_ASSERT(program.days[dayNum].rooms.size() == program.days[dayNum].intervals[intervalNum].talks.size());
+    for (int i=0; i<program.days[dayNum].rooms.size(); i++) {
+        TalkModel* m = new TalkModel(program.days[dayNum].intervals[intervalNum].talks[i], program.days[dayNum].rooms[i]);
+        model.append(m);
+    }
+    ctxt->setContextProperty("currentTalksModel", QVariant::fromValue(model));
+}
 
 int main(int argc, char** argv) {
     QGuiApplication app(argc, argv);
@@ -51,6 +93,14 @@ int main(int argc, char** argv) {
         view.setPosition(posx, posy);
     }
 
+    QNetworkAccessManager qnam;
+    ProgramFetcher fetcher(&qnam, QUrl::fromLocalFile("programme-test.json"));
+    //ProgramFetcher fetcher(&qnam, QUrl("http://www.foss4g-ar.org/programme.json"));
+    QObject::connect(&fetcher, &ProgramFetcher::finished, [&view](const Program& p) {
+        updateModel(view.rootContext(), p);
+    });
+    fetcher.fetchAsync();
+
     if (parser.isSet("fullscreen")) {
         view.showFullScreen();
     } else {
@@ -59,3 +109,4 @@ int main(int argc, char** argv) {
 
     return app.exec();
 }
+#include "main.moc"

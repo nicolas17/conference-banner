@@ -102,7 +102,7 @@ Rectangle {
             y:25+12+83
             width: 800
             height: 600
-            model: talkModel3
+            model: currentTalksModel
             highlightFollowsCurrentItem: true
             highlightMoveDuration: 1000
             highlightMoveVelocity: -1
@@ -112,7 +112,7 @@ Rectangle {
                 height: txt.contentHeight+30
                 Text {
                     id: txt
-                    text: "<font color='white'>"+escapeHTML(room)+': </font>'+escapeHTML(name)
+                    text: "<font color='white'>"+escapeHTML(room)+': </font>'+escapeHTML(title)
                     font.family: fjalla.name
                     font.pixelSize: 40
                     color: "#0089cf";

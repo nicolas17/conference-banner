@@ -159,7 +159,70 @@ Program Program::fromProgramData(const ProgramData& data)
             }
             day.intervals.append(interval);
         }
-        program.days.append(day);
+        program.m_days.append(day);
     }
+    program.validate();
     return program;
+}
+
+void Program::validate() const
+{
+    const Interval* previousInterval = nullptr;
+
+    for (int dayIdx = 0; dayIdx < m_days.size(); ++dayIdx) {
+        const Day& day = m_days.at(dayIdx);
+        QDate daysDate;
+        for (int intervalIdx = 0; intervalIdx < day.intervals.size(); ++intervalIdx) {
+            const Interval* interval = &day.intervals[intervalIdx];
+            // check that intervals start before they end
+            Q_ASSERT(interval->start < interval->end);
+            if (previousInterval) {
+                // check that intervals are sorted
+                Q_ASSERT(previousInterval->end <= interval->start);
+            }
+            previousInterval = interval;
+            // check that intervals start and end in the same day
+            Q_ASSERT(interval->start.date() == interval->end.date());
+
+            // check that all intervals in a "day" do in fact have the same date
+            if (daysDate.isValid()) {
+                Q_ASSERT(daysDate == interval->start.date());
+            } else {
+                daysDate = interval->start.date();
+            }
+        }
+    }
+}
+
+QDate Day::date() const
+{
+    if (intervals.isEmpty()) {
+        return QDate();
+    } else {
+        // this is known to be correct if validate() passed
+        return intervals[0].start.date();
+    }
+}
+
+const QList<Day>& Program::days() const
+{
+    return m_days;
+}
+const Day* Program::getDayByName(const QString& name) const
+{
+    Q_FOREACH(const Day& day, m_days) {
+        if (day.title == name) {
+            return &day;
+        }
+    }
+    return nullptr;
+}
+const Day* Program::getDayByDate(const QDate& date) const
+{
+    Q_FOREACH(const Day& day, m_days) {
+        if (day.date() == date) {
+            return &day;
+        }
+    }
+    return nullptr;
 }

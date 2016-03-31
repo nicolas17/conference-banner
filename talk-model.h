@@ -54,11 +54,18 @@ struct Interval {
 struct Day {
     QString title;
     QList<Interval> intervals;
+    QDate date() const;
 };
 class Program {
+private:
+    QList<Day> m_days;
+    void validate() const;
 public:
-    QList<Day> days;
     static Program fromProgramData(const ProgramData& data);
+
+    const QList<Day>& days() const;
+    const Day* getDayByName(const QString& name) const;
+    const Day* getDayByDate(const QDate& date) const;
 };
 
 void debugOutput(const ProgramData& program);

@@ -18,6 +18,9 @@ int main(int argc, char** argv) {
     ProgramFetcher fetcher(&qnam, QUrl::fromLocalFile("programme-test.json"));
     QObject::connect(&fetcher, &ProgramFetcher::finished, [&app](const ProgramData& p) {
         debugOutput(p);
+        Program prog = Program::fromProgramData(p);
+        qDebug() << prog.days()[1].date();
+        qDebug() << prog.getDayByDate(QDate(2016, 4, 7))->title;
         app.quit();
     });
     fetcher.fetchAsync();

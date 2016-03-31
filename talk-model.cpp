@@ -138,3 +138,28 @@ void debugOutput(const ProgramData& program) {
         qDebug() << "End day";
     }
 }
+
+Program Program::fromProgramData(const ProgramData& data)
+{
+    Program program;
+    Q_FOREACH (const DayData& dayData, data.days) {
+        Day day;
+        day.title = dayData.title;
+        Q_FOREACH (const IntervalData& intervalData, dayData.intervals) {
+            Interval interval;
+            interval.start = intervalData.start;
+            interval.end = intervalData.end;
+            Q_ASSERT(intervalData.talks.isEmpty() || dayData.rooms.size() == intervalData.talks.size());
+            for (int i = 0; i < intervalData.talks.size(); ++i) {
+                Talk talk;
+                talk.title = intervalData.talks.at(i).title;
+                // TODO other fields, if I need them
+                talk.roomName = dayData.rooms.at(i);
+                interval.talks.append(talk);
+            }
+            day.intervals.append(interval);
+        }
+        program.days.append(day);
+    }
+    return program;
+}

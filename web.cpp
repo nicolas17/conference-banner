@@ -11,6 +11,7 @@
 #include <QAction>
 #include <QWidget>
 #include <QWebView>
+#include <QDebug>
 
 class WebBanner: public QWidget {
 private:
@@ -27,12 +28,16 @@ WebBanner::WebBanner(QApplication* app) {
 
     QAction* quitAction = new QAction(this);
     quitAction->setShortcut(QKeySequence(Qt::Key_Escape));
-    connect(quitAction, &QAction::triggered, app, &QApplication::quit);
+    connect(quitAction, &QAction::triggered, app, [app] {
+        qDebug() << "Esc pressed, quitting banner";
+        app->quit();
+    });
     this->addAction(quitAction);
 
     QAction* refreshAction = new QAction(this);
     refreshAction->setShortcuts({QKeySequence(Qt::CTRL | Qt::Key_R), QKeySequence(Qt::Key_F5)});
     connect(refreshAction, &QAction::triggered, webView, [this] {
+        qDebug() << "Refreshing page, requested by keyboard";
         webView->triggerPageAction(QWebPage::Reload);
     });
     this->addAction(refreshAction);

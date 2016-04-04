@@ -8,6 +8,7 @@
 
 #include <QApplication>
 
+#include <QAction>
 #include <QWidget>
 #include <QWebView>
 
@@ -23,6 +24,18 @@ WebBanner::WebBanner(QApplication* app) {
     webView = new QWebView(this);
     webView->setDisabled(true);
     webView->load(QUrl("http://www.foss4g-ar.org/banner.html"));
+
+    QAction* quitAction = new QAction(this);
+    quitAction->setShortcut(QKeySequence(Qt::Key_Escape));
+    connect(quitAction, &QAction::triggered, app, &QApplication::quit);
+    this->addAction(quitAction);
+
+    QAction* refreshAction = new QAction(this);
+    refreshAction->setShortcuts({QKeySequence(Qt::CTRL | Qt::Key_R), QKeySequence(Qt::Key_F5)});
+    connect(refreshAction, &QAction::triggered, webView, [this] {
+        webView->triggerPageAction(QWebPage::Reload);
+    });
+    this->addAction(refreshAction);
 }
 void WebBanner::resizeEvent(QResizeEvent* event) {
     webView->resize(this->size());

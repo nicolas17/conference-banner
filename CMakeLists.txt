@@ -30,3 +30,5 @@ install(TARGETS foss4g-banner
 install(FILES main.qml Slide1.qml Slide2.qml patagonia-bg.png foss4g-ar-1.png
     DESTINATION ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}
 )
+
+add_executable(vtprepare vtprepare.cpp)

@@ -9,6 +9,7 @@
 #include <QApplication>
 
 #include <QDebug>
+#include <QProcess>
 
 #include <QAction>
 #include <QWidget>
@@ -64,6 +65,14 @@ WebBanner::WebBanner(QApplication* app) {
         setPadding(m_padding-1);
     });
     this->addAction(decreasePaddingAction);
+
+    QAction* shutdownAction = new QAction(this);
+    shutdownAction->setShortcut(QKeySequence(Qt::CTRL | Qt::ALT | Qt::Key_Delete));
+    connect(shutdownAction, &QAction::triggered, this, [this] {
+        qDebug() << "Shutting down...";
+        qDebug() << "poweroff status code:" << QProcess::execute("sudo poweroff");
+    });
+    this->addAction(shutdownAction);
 
     connect(webView, &QWebView::loadFinished, this, [this] {
         qDebug() << "Page finished loading";

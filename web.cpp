@@ -21,6 +21,7 @@ public:
 
 WebBanner::WebBanner(QApplication* app) {
     webView = new QWebView(this);
+    webView->setDisabled(true);
     webView->load(QUrl("http://www.foss4g-ar.org/banner.html"));
 }
 void WebBanner::resizeEvent(QResizeEvent* event) {

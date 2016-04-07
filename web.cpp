@@ -13,6 +13,8 @@
 
 #include <QAction>
 #include <QWidget>
+#include <QNetworkProxyFactory>
+
 #include <QWebView>
 #include <QWebFrame>
 #include <QWebElement>
@@ -104,6 +106,8 @@ void WebBanner::setPadding(int padding) {
 
 int main(int argc, char** argv) {
     QApplication app(argc, argv);
+
+    QNetworkProxyFactory::setUseSystemConfiguration(true);
 
     WebBanner banner(&app);
     banner.showFullScreen();

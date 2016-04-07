@@ -14,6 +14,8 @@
 #include <QAction>
 #include <QWidget>
 #include <QNetworkProxyFactory>
+#include <QNetworkAccessManager>
+#include <QNetworkDiskCache>
 
 #include <QWebView>
 #include <QWebFrame>
@@ -33,7 +35,11 @@ public:
 };
 
 WebBanner::WebBanner(QApplication* app) {
+    QNetworkDiskCache* cache = new QNetworkDiskCache(this);
+    cache->setCacheDirectory(QStringLiteral("/tmp/banner-cache"));
+
     webView = new QWebView(this);
+    webView->page()->networkAccessManager()->setCache(cache);
     webView->setDisabled(true);
     webView->load(QUrl("http://www.foss4g-ar.org/banner.html"));
 
